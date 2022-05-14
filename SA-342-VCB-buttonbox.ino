@@ -11,9 +11,10 @@
 
 #include <Encoder.h>
 const int stick_pins[2] = { 14, 15 };
-const int rocker_pins[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+const int rocker_pins[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 int stick_pos[2];
-bool rocker_pos[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+bool button_state[2];
+bool rocker_pos[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 int enc_pos[2] = { 512, 512 };
 Encoder enc_1(22, 21);                                      //add encoder objects
 Encoder enc_2(20, 19);
@@ -21,7 +22,7 @@ Encoder enc_2(20, 19);
 void setup(){
   analogReadResolution(12);                                 //analog precision set to 12bits
   //Serial.begin(115200);
-  for (int i = 0; i < 11; i++){
+  for (int i = 0; i < sizeof(rocker_pins); i++){
     pinMode(rocker_pins[i], INPUT_PULLUP);                  //set all toggle switch pins to input_pullup
   }
 
@@ -37,13 +38,22 @@ void loop(){
   Joystick.X(map(stick_pos[0], 0, 4096, 1024, 0));          //send the stick position
   Joystick.Y(map(stick_pos[1], 0, 4096, 1024, 0));
 
-  for (int i = 0; i < 11; i++){
+  for (int i = 0; i < sizeof(rocker_pins); i++){
     rocker_pos[i] = !digitalRead(rocker_pins[i]);           //read toggle switch positions
     int button_num = i;
     button_num++;
     Joystick.button(button_num, rocker_pos[i]);             //send the button states
   }
-  delay(10);
+
+  button_state[0] = digitalRead(10);
+  if (button_state[0] != button_state[1]){
+    button_state[1] = button_state[0];
+    if (button_state[0] == true){
+      Joystick.button(11, 1);
+    } else{
+      Joystick(11, 0);
+    }
+  }
 
   int enc_1_pos = 7 * enc_1.read();                         //read encoder status
   int enc_2_pos = 7 * enc_2.read();
@@ -62,4 +72,5 @@ void loop(){
     Joystick.sliderRight(enc_pos[1]);
     enc_2.write(0);
   }
+  delay(10);
 }
