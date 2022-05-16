@@ -51,7 +51,7 @@ void loop(){
     if (button_state[0] == true){
       Joystick.button(11, 1);
     } else{
-      Joystick(11, 0);
+      Joystick.button(11, 0);
     }
   }
 
