@@ -8,7 +8,6 @@
 * //     | | //      ((___/ / ((____   //       //     | | //      ((___( ( ((___/ /
 *
 */
-
 #include <Encoder.h>
 const int stick_pins[2] = { 14, 15 };
 const int rocker_pins[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -32,13 +31,13 @@ void setup(){
 }
 
 void loop(){
-  for (int i = 0; i < 2; i++){
+  for (uint8_t i = 0; i < 2; i++){
     stick_pos[i] = analogRead(stick_pins[i]);               //read stick position
   }
   Joystick.X(map(stick_pos[0], 0, 4096, 1024, 0));          //send the stick position
   Joystick.Y(map(stick_pos[1], 0, 4096, 1024, 0));
 
-  for (int i = 0; i < sizeof(rocker_pins); i++){
+  for (uint8_t i = 0; i < sizeof(rocker_pins); i++){
     rocker_pos[i] = !digitalRead(rocker_pins[i]);           //read toggle switch positions
     int button_num = i;
     button_num++;
