@@ -21,7 +21,7 @@ Encoder enc_2(20, 19);
 void setup(){
   analogReadResolution(12);                                 //analog precision set to 12bits
   //Serial.begin(115200);
-  for (int i = 0; i < sizeof(rocker_pins); i++){
+  for (uint8_t i = 0; i < sizeof(rocker_pins); i++){
     pinMode(rocker_pins[i], INPUT_PULLUP);                  //set all toggle switch pins to input_pullup
   }
 
