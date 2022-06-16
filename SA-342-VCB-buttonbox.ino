@@ -12,7 +12,7 @@
 const int stick_pins[2] = { 14, 15 };
 const int rocker_pins[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 int stick_pos[2];
-bool button_state[2];
+bool button_state[2] = { 0,0 };
 bool rocker_pos[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 int enc_pos[2] = { 512, 512 };
 Encoder enc_1(22, 21);                                      //add encoder objects
@@ -47,11 +47,9 @@ void loop(){
   button_state[0] = digitalRead(10);
   if (button_state[0] != button_state[1]){
     button_state[1] = button_state[0];
-    if (button_state[0] == true){
-      Joystick.button(11, 1);
-    } else{
-      Joystick.button(11, 0);
-    }
+    Joystick.button(11, 1);
+  } else{
+    Joystick.button(11, 0);
   }
 
   int enc_1_pos = 7 * enc_1.read();                         //read encoder status
